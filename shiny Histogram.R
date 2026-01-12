@@ -1,16 +1,63 @@
-#Basic function/code
 
-Comments;- By using hastag we can convert the line into a comment,#.
-ls();- This function generate all the variables in the console.(make a list of all variables)
-rm();- This is used for removing the specific objects/variable in the environment.
-Ctrl+enter;- This shortcut key to run and execute the code in the R scripts.
-Ctrl+L;- used for cleaning the console panel.
-rm(list=ls());- used for removing all objects in the environment.
-getwd();-Is used to get working directory.(location where our code is saving).
-setwd("C:\\Users\\HP\\OneDrive\\Desktop\\Data Science\\R Programming\\code")
-setwd("location");- By using this function we can change our location where we have to store.
-install.packages(" ");- This is use to install the package provided in R studio.
-library();-This is use to call the package. 
+######## Welcome to Ankit Tutorial for R Shiny ###############
+######################### Histogram ##########################
+#open your R Studio 
+#get the inbuild data set airquality
+
+library(shiny)
+data<-data(airquality)
+
+# Define UI for app that draws a histogram ----
+ui <- fluidPage(
+  
+  # App title ----
+  titlePanel("Ozone level!"),
+  
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+    
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+      
+      # Input: Slider for the number of bins ----
+      sliderInput(inputId = "bins",
+                  label = "Number of bins:",
+                  min = 1,
+                  max = 50,
+                  value = 30)
+      
+    ),
+    
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      # Output: Histogram ----
+      plotOutput(outputId = "distPlot")
+      
+    )
+  )
+)
+
+# Define server logic required to draw a histogram ----
+server <- function(input, output) {
+  
+  
+  output$distPlot <- renderPlot({
+    
+    x    <- airquality$Ozone 
+    x    <- na.omit(x) #Remove all NA values from data frame
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    
+    hist(x, breaks = bins, col = "darkorange", border = "black",
+         xlab = "Ozone level",
+         main = "Histogram of Ozone level")
+    
+  })
+  
+}
+
+# Open your Shiny App ----
+shinyApp(ui = ui, server = server)
 
 
-Add<-function(X,Y){(X+Y) return(X-Y) temp<<-(X*Y) return((X/Y))}
+
